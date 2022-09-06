@@ -8,6 +8,7 @@ namespace MyBoards.Entities
 {
     public class WorkItem
     {
+        public int Id { get; set; }
         public string State { get; set; }
         public string Area { get; set; }
         public string IterationPath { get; set; }
