@@ -27,8 +27,10 @@ namespace MyBoards.Entities
 
 
         public string Type { get; set; }
+
         public List<Comment> Comments { get; set; } = new List<Comment>();
         public User Author { get; set; }
         public Guid AuthorId  { get; set; }
+        public List<Tag> Tags { get; set; }
     }
 }
