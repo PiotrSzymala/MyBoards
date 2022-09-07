@@ -35,6 +35,10 @@ namespace MyBoards.Entities
                 eb.HasMany(w => w.Comments)
                     .WithOne(c => c.WorkItem)
                     .HasForeignKey(c => c.WorkItemId);
+
+                eb.HasOne(w => w.Author)
+                    .WithMany(u => u.WorkItems)
+                    .HasForeignKey(w => w.AuthorId);
             });
 
             modelBuilder.Entity<Comment>(eb =>
