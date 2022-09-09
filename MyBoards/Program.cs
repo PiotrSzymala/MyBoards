@@ -55,8 +55,18 @@ if (!users.Any())
         }
     };
 
-    dbContext.Users.AddRange(user1,user2);
+    dbContext.Users.AddRange(user1, user2);
     dbContext.SaveChanges();
 }
-app.Run();
 
+app.MapGet("data", async (MyBoardsContext db) =>
+{
+    var statesCount = await db.WorkItems
+        .GroupBy(x => x.StateId)
+        .Select(g => new { stateId = g.Key, count = g.Count() })
+        .ToListAsync();
+
+    return statesCount;
+});
+
+app.Run();
