@@ -88,7 +88,7 @@ namespace MyBoards.Entities
             {
                 eb.Property(x => x.CreatedDate).HasDefaultValueSql("getutcdate()");
                 eb.Property(x => x.UpdatedDate).ValueGeneratedOnUpdate();
-                
+
                 eb.HasOne(c => c.Author)
                     .WithMany(a => a.Comments)
                     .HasForeignKey(c => c.AuthorId)
@@ -99,6 +99,11 @@ namespace MyBoards.Entities
                 .HasOne(x => x.Address)
                 .WithOne(x => x.User)
                 .HasForeignKey<Address>(a => a.UserId);
+
+            modelBuilder.Entity<WorkItemState>()
+                .HasData(new WorkItemState() { Id = 1, Value = "To Do" },
+                    new WorkItemState() { Id = 2, Value = "Doing" },
+                    new WorkItemState() { Id = 3, Value = "Done" });
         }
     }
 }
