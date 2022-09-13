@@ -91,4 +91,27 @@ app.MapPost("update", async (MyBoardsContext db) =>
 
     return epic;
 });
+
+app.MapPost("create", async (MyBoardsContext db) =>
+{
+    var address = new Address()
+    {
+        Id = Guid.Parse("b323dd7d-776a-4cf6-a92a-12df154b4a2c"),
+        City = "Katowice",
+        Country = "Poland",
+        Street = "Sciegiennego"
+    };
+
+    var user = new User()
+    {
+        Email = "test.user@test.com",
+        FullName = "User Test",
+        Address = address
+    };
+
+    db.Users.Add(user);
+    await db.SaveChangesAsync();
+    
+    return user;
+});
 app.Run();
