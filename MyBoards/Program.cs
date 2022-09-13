@@ -69,4 +69,16 @@ app.MapGet("data", async (MyBoardsContext db) =>
     return statesCount;
 });
 
+app.MapPost("update", async (MyBoardsContext db) =>
+{
+    Epic epic = await db.Epics.FirstAsync(epic => epic.Id == 1);
+
+    var rejectedState = await db.WorkItemStates.FirstAsync(a => a.Value == "Rejected");
+
+    epic.State = rejectedState;
+
+    await db.SaveChangesAsync();
+
+    return epic;
+});
 app.Run();
