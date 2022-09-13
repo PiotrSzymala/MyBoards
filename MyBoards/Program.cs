@@ -67,8 +67,12 @@ if (!users.Any())
 
 app.MapGet("data",  async (MyBoardsContext db) =>
 {
-    var user = await db.Users.FirstAsync(u => u.Id == Guid.Parse("68366DBE-0809-490F-CC1D-08DA10AB0E61"));
-    var userComments = user.Comments;
+    var user = await db.Users
+        .Include(u=>u.Comments)
+        .ThenInclude(c=>c.WorkItem)
+        .Include(u=>u.Address)
+        .FirstAsync(u => u.Id == Guid.Parse("68366DBE-0809-490F-CC1D-08DA10AB0E61"));
+  
 
     return user;
 });
