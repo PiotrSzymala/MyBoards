@@ -59,14 +59,24 @@ if (!users.Any())
     dbContext.SaveChanges();
 }
 
-app.MapGet("data", async (MyBoardsContext db) =>
+app.MapGet("data",  async (MyBoardsContext db) =>
 {
-    var statesCount = await db.WorkItems
-        .GroupBy(x => x.StateId)
-        .Select(g => new { stateId = g.Key, count = g.Count() })
+    var countedComments = await db
+        .Comments.GroupBy(x => x.AuthorId)
+        .Select(c => new { c.Key, Count = c.Count() })
         .ToListAsync();
 
-    return statesCount;
+    var userWithMostComments = countedComments
+        .OrderByDescending(x => x.Count)
+        .First();
+
+    var moreInfoAboutUser = db
+        .Users
+        .Where(x => x.Id == userWithMostComments.Key);
+
+
+    return new { moreInfoAboutUser, commentCount = userWithMostComments.Count };
+
 });
 
 app.MapPost("update", async (MyBoardsContext db) =>
