@@ -15,7 +15,9 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 
 builder.Services.AddDbContext<MyBoardsContext>(
-    option => option.UseSqlServer(builder.Configuration.GetConnectionString("MyBoardsConnectionString"))
+    option => option
+        .UseLazyLoadingProxies()
+        .UseSqlServer(builder.Configuration.GetConnectionString("MyBoardsConnectionString"))
     );
 
 var app = builder.Build();
@@ -67,10 +69,18 @@ if (!users.Any())
 
 app.MapGet("data",  async (MyBoardsContext db) =>
 {
-    var topAuthors = db.ViewTopAuthors.ToList();
-  
+    var withAddress = true;
 
-    return topAuthors;
+    var user = db.Users
+        .First(u => u.Id == Guid.Parse("EBFBD70D-AC83-4D08-CBC6-08DA10AB0E61"));
+
+    if (withAddress)
+    {
+        var result = new { FullName = user.FullName, Address = $"{user.Address.Street} {user.Address.City}" };
+        return result;
+    }
+
+    return new { FullName = user.FullName, Address = "-" };
 });
 
 app.MapPost("update", async (MyBoardsContext db) =>
