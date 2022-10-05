@@ -9,5 +9,3 @@ Project was created with:
 * ASP.NET Core
 * Entity Framework Core
 * Git
-## Project status
-* 1.0 version developed.
